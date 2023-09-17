@@ -134,7 +134,6 @@ tomcat*.xml
 # gradle
 *.bin
 *.lock
-.gradle
 .gradle/**
 build/
 !gradle/wrapper/gradle-wrapper.jar
