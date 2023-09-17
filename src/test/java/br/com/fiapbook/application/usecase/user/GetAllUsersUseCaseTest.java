@@ -1,11 +1,11 @@
-package br.com.fiapbook.domain.user;
+package br.com.fiapbook.application.usecase.user;
 
 import static br.com.fiapbook.shared.testData.user.UserTestData.getUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import br.com.fiapbook.application.user.usecase.GetAllUsersUseCase;
 import br.com.fiapbook.domain.user.entity.User;
-import br.com.fiapbook.domain.user.repository.UserRepository;
 import br.com.fiapbook.domain.user.service.UserService;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,26 +18,26 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 @ExtendWith(MockitoExtension.class)
-class UserServiceTest {
+class GetAllUsersUseCaseTest {
 
   private static final int PAGE_NUMBER = 0;
   private static final int PAGE_SIZE = 1;
 
   @Mock
-  private UserRepository userRepository;
-  @InjectMocks
   private UserService userService;
+  @InjectMocks
+  private GetAllUsersUseCase getAllUsersUseCase;
 
   @Test
-  void shouldGetAllUsersPaginatedWhenUsersExits() {
+  void shouldGetAllUsersWhenUsersExists() {
     var user = getUser();
     var users = List.of(user);
     var pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
     var size = users.size();
     var page = new PageImpl<>(users, pageable, size);
 
-    when(userRepository.findAll(pageable)).thenReturn(page);
-    var usersFound = userService.getAllUsersPaginated(pageable);
+    when(userService.getAllUsersPaginated(pageable)).thenReturn(page);
+    var usersFound = getAllUsersUseCase.execute(pageable);
 
     assertThat(usersFound).isNotNull();
     assertThat(usersFound.getSize()).isEqualTo(PAGE_SIZE);
@@ -52,8 +52,8 @@ class UserServiceTest {
     var size = 0;
     var page = new PageImpl<>(users, pageable,  size);
 
-    when(userRepository.findAll(pageable)).thenReturn(page);
-    var usersFound = userService.getAllUsersPaginated(pageable);
+    when(userService.getAllUsersPaginated(pageable)).thenReturn(page);
+    var usersFound = getAllUsersUseCase.execute(pageable);
 
     assertThat(usersFound).isNotNull();
     assertThat(usersFound.getSize()).isEqualTo(PAGE_SIZE);
