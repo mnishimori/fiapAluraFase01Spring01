@@ -1,4 +1,4 @@
-package br.com.fiapbook.domain.user;
+package br.com.fiapbook.domain.user.entity;
 
 import br.com.fiapbook.shared.domain.entity.BaseEntity;
 import jakarta.persistence.Column;
@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(schema = "user", name = "users")
+@Table(schema = "user_management", name = "users")
 public class User extends BaseEntity {
 
   @Column(nullable = false)
