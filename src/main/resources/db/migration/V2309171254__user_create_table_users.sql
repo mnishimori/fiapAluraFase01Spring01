@@ -1,6 +1,6 @@
-create schema "user";
+create schema "user_management";
 
-create table "user"."users"
+create table "user_management"."users"
 (
     "id"         uuid                        not null default gen_random_uuid(),
     "deleted"    boolean                     not null default false,
