@@ -135,6 +135,8 @@ tomcat*.xml
 *.bin
 *.lock
 .gradle/**
+.gradle/8.2.1/**
+.gradle/buildOutputCleanup/**
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
@@ -142,3 +144,5 @@ build/
 
 identified-project-coordinates.json
 
+/.gradle/
+/.gradle/
