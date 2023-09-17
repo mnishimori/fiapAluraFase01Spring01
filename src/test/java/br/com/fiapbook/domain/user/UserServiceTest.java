@@ -1,6 +1,6 @@
 package br.com.fiapbook.domain.user;
 
-import static br.com.fiapbook.shared.testData.user.UserTestData.getUser;
+import static br.com.fiapbook.shared.testData.user.UserTestData.getUserWithId;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -30,7 +30,7 @@ class UserServiceTest {
 
   @Test
   void shouldGetAllUsersPaginatedWhenUsersExits() {
-    var user = getUser();
+    var user = getUserWithId();
     var users = List.of(user);
     var pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
     var size = users.size();
