@@ -134,6 +134,12 @@ tomcat*.xml
 # gradle
 *.bin
 *.lock
+.gradle
+.gradle/**
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
 
 identified-project-coordinates.json
 
