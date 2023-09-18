@@ -4,8 +4,8 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import br.com.fiapbook.domain.user.entity.User;
-import br.com.fiapbook.shared.annotation.ApiTest;
 import br.com.fiapbook.shared.annotation.DatabaseTest;
+import br.com.fiapbook.shared.annotation.IntegrationTest;
 import br.com.fiapbook.shared.testData.user.UserTestData;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@ApiTest
+@IntegrationTest
 @DatabaseTest
 class GetAllUsersPaginatedApiTest {
 
@@ -43,4 +43,5 @@ class GetAllUsersPaginatedApiTest {
         .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.content", hasSize(1)));
   }
+
 }
