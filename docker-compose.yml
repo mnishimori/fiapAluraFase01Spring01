@@ -1,0 +1,38 @@
+version: '3.1'
+
+services:
+  fiapbook-db:
+    container_name: postgresql-fiapbook
+    image: postgres:15.1
+    environment:
+      POSTGRES_DB: fiapbook
+      POSTGRES_USER: fiap-postgres-user
+      POSTGRES_PASSWORD: fiap-postgres-pwd
+    ports:
+      - 5432:5432
+    volumes:
+      - type: bind
+        source: /home/akio/Db/postgresql
+        target: /var/lib/postgres
+    networks:
+      - postgres-compose-network
+      
+  fiapbook-pgadmin-compose:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "mnishimori@yahoo.com.br"
+      PGADMIN_DEFAULT_PASSWORD: "developer"
+    ports:
+      - "16543:80"
+    volumes:
+      - type: bind
+        source: /home/akio/Db/postgresql
+        target: /var/lib/postgres
+    depends_on:
+      - fiapbook-db
+    networks:
+      - postgres-compose-network
+
+networks: 
+  postgres-compose-network:
+    driver: bridge
