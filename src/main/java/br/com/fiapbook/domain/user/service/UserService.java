@@ -15,6 +15,10 @@ public class UserService {
     this.userRepository = userRepository;
   }
 
+  public User save(User user){
+    return userRepository.save(user);
+  }
+
   public Page<User> getAllUsersPaginated(Pageable pageable){
     return userRepository.findAll(pageable);
   }
