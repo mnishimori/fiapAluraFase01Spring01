@@ -1,7 +1,10 @@
 package br.com.fiapbook.domain.user;
 
 import static br.com.fiapbook.shared.testData.user.UserTestData.getUserWithId;
+import static br.com.fiapbook.shared.testData.user.UserTestData.getUserWithoutId;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import br.com.fiapbook.domain.user.entity.User;
@@ -27,6 +30,19 @@ class UserServiceTest {
   private UserRepository userRepository;
   @InjectMocks
   private UserService userService;
+
+  @Test
+  void shouldSaveUserWhenAllAttributesAreCorrect() {
+      var user = getUserWithoutId();
+      when(userRepository.save(user)).then(returnsFirstArg());
+
+      var userSaved = userService.save(user);
+
+      assertThat(userSaved).isNotNull();
+      assertThat(userSaved.getName()).isEqualTo(user.getName());
+      assertThat(userSaved.getEmail()).isEqualTo(user.getEmail());
+      verify(userRepository).save(user);
+  }
 
   @Test
   void shouldGetAllUsersPaginatedWhenUsersExits() {
