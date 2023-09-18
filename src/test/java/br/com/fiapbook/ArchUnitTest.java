@@ -33,10 +33,10 @@ class ArchUnitTest {
     layeredArchitecture().consideringAllDependencies()
         .layer("Presentation").definedBy("..presentation..")
         .layer("Application").definedBy("..application..")
-        .layer("Domain").definedBy("..domain..")
+        .layer("Model").definedBy("..model..")
         .whereLayer("Presentation").mayNotBeAccessedByAnyLayer()
         .whereLayer("Application").mayOnlyBeAccessedByLayers( "Presentation")
-        .whereLayer("Domain").mayOnlyBeAccessedByLayers("Application", "Presentation")
+        .whereLayer("Model").mayOnlyBeAccessedByLayers("Application", "Presentation")
         .check(mainPackages);
   }
 

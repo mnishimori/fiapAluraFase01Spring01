@@ -1,6 +1,6 @@
 package br.com.fiapbook.shared.testData.user;
 
-import br.com.fiapbook.domain.entity.user.User;
+import br.com.fiapbook.user.model.entity.User;
 import java.util.UUID;
 
 public class UserTestData {
