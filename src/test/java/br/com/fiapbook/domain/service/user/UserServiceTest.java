@@ -1,4 +1,4 @@
-package br.com.fiapbook.domain.user;
+package br.com.fiapbook.domain.service.user;
 
 import static br.com.fiapbook.shared.testData.user.UserTestData.getUserWithId;
 import static br.com.fiapbook.shared.testData.user.UserTestData.getUserWithoutId;
@@ -7,9 +7,8 @@ import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import br.com.fiapbook.domain.user.entity.User;
-import br.com.fiapbook.domain.user.repository.UserRepository;
-import br.com.fiapbook.domain.user.service.UserService;
+import br.com.fiapbook.domain.entity.user.User;
+import br.com.fiapbook.domain.repository.user.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -32,7 +31,7 @@ class UserServiceTest {
   private UserService userService;
 
   @Test
-  void shouldSaveUserWhenAllAttributesAreCorrect() {
+  void shouldSaveUserWhenAllUserAttributesAreCorrect() {
       var user = getUserWithoutId();
       when(userRepository.save(user)).then(returnsFirstArg());
 

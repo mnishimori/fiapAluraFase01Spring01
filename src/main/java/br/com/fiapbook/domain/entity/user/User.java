@@ -1,4 +1,4 @@
-package br.com.fiapbook.domain.user.entity;
+package br.com.fiapbook.domain.entity.user;
 
 import br.com.fiapbook.shared.domain.entity.BaseEntity;
 import jakarta.persistence.Column;

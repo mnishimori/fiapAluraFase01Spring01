@@ -10,12 +10,12 @@ import org.springframework.context.ApplicationContext;
 
 @IntegrationTest
 @DatabaseTest
-class FiapbookApplicationTests {
+class FiapbookApplicationTest {
 
 	private final ApplicationContext applicationContext;
 
 	@Autowired
-	FiapbookApplicationTests(ApplicationContext applicationContext) {
+	FiapbookApplicationTest(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
 	}
 

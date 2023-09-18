@@ -1,6 +1,6 @@
 package br.com.fiapbook.presentation.api.user;
 
-import br.com.fiapbook.application.user.usecase.GetAllUsersUseCase;
+import br.com.fiapbook.application.usecase.user.GetAllUsersUseCase;
 import br.com.fiapbook.presentation.dto.user.UserOutputDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

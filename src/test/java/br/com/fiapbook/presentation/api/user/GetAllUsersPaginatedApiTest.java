@@ -3,7 +3,7 @@ package br.com.fiapbook.presentation.api.user;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-import br.com.fiapbook.domain.user.entity.User;
+import br.com.fiapbook.domain.entity.user.User;
 import br.com.fiapbook.shared.annotation.DatabaseTest;
 import br.com.fiapbook.shared.annotation.IntegrationTest;
 import br.com.fiapbook.shared.testData.user.UserTestData;

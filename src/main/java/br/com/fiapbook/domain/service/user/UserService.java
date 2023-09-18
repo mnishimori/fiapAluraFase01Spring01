@@ -1,7 +1,7 @@
-package br.com.fiapbook.domain.user.service;
+package br.com.fiapbook.domain.service.user;
 
-import br.com.fiapbook.domain.user.entity.User;
-import br.com.fiapbook.domain.user.repository.UserRepository;
+import br.com.fiapbook.domain.repository.user.UserRepository;
+import br.com.fiapbook.domain.entity.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

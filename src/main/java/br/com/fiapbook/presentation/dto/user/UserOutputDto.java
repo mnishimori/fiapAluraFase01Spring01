@@ -1,6 +1,6 @@
 package br.com.fiapbook.presentation.dto.user;
 
-import br.com.fiapbook.domain.user.entity.User;
+import br.com.fiapbook.domain.entity.user.User;
 import org.springframework.data.domain.Page;
 
 public record UserOutputDto(
