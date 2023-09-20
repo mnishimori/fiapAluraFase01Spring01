@@ -1,4 +1,4 @@
-package br.com.fiapbook.user.model.repository;
+package br.com.fiapbook.user.infrastructure.repository;
 
 import br.com.fiapbook.user.model.entity.User;
 import java.util.Optional;
