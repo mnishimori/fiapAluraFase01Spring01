@@ -19,4 +19,8 @@ public record UserOutputDto(
     return usersPage.map(UserOutputDto::new);
   }
 
+  public static UserOutputDto from(User user){
+    return new UserOutputDto(user);
+  }
+
 }
