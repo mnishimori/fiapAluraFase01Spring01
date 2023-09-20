@@ -7,12 +7,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
-public class SaveNewUserUseCase {
+public class CreateUserUseCase {
 
   private final UserService userService;
   private final UserEmailAlreadyRegisteredValidator userEmailAlreadyRegisteredValidator;
 
-  public SaveNewUserUseCase(
+  public CreateUserUseCase(
       UserService userService,
       UserEmailAlreadyRegisteredValidator userEmailAlreadyRegisteredValidator) {
     this.userService = userService;

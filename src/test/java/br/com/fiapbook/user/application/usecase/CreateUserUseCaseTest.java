@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import br.com.fiapbook.shared.testData.user.UserTestData;
+import br.com.fiapbook.user.application.validator.UserEmailAlreadyRegisteredValidator;
 import br.com.fiapbook.user.model.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,24 +15,27 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class SaveNewUserUseCaseTest {
+class CreateUserUseCaseTest {
 
   @Mock
   private UserService userService;
+  @Mock
+  private UserEmailAlreadyRegisteredValidator userEmailAlreadyRegisteredValidator;
   @InjectMocks
-  private SaveNewUserUseCase saveNewUserUseCase;
+  private CreateUserUseCase createUserUseCase;
 
   @Test
-  void shouldSaveANewUserWhenAllUserAttributesAreCorrect(){
+  void shouldCreateNewUserWhenAllUserAttributesAreCorrect(){
     var user = UserTestData.getUserWithoutId();
     when(userService.save(user)).then(returnsFirstArg());
 
-    var userSaved = saveNewUserUseCase.execute(user);
+    var userSaved = createUserUseCase.execute(user);
 
+    verify(userEmailAlreadyRegisteredValidator).validate(user.getEmail());
+    verify(userService).save(user);
     assertThat(userSaved).isNotNull();
     assertThat(userSaved.getName()).isEqualTo(user.getName());
     assertThat(userSaved.getEmail()).isEqualTo(user.getEmail());
-    verify(userService).save(user);
   }
 
 }
