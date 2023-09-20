@@ -1,7 +1,7 @@
 package br.com.fiapbook.user.model.service;
 
 import br.com.fiapbook.user.model.entity.User;
-import br.com.fiapbook.user.model.repository.UserRepository;
+import br.com.fiapbook.user.infrastructure.repository.UserRepository;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
