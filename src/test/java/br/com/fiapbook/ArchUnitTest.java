@@ -34,9 +34,10 @@ class ArchUnitTest {
         .layer("Presentation").definedBy("..presentation..")
         .layer("Application").definedBy("..application..")
         .layer("Model").definedBy("..model..")
+        .layer("Infrastructure").definedBy("..infrastructure..")
         .whereLayer("Presentation").mayNotBeAccessedByAnyLayer()
         .whereLayer("Application").mayOnlyBeAccessedByLayers( "Presentation")
-        .whereLayer("Model").mayOnlyBeAccessedByLayers("Application", "Presentation")
+        .whereLayer("Model").mayOnlyBeAccessedByLayers("Application", "Presentation", "Infrastructure")
         .check(mainPackages);
   }
 
