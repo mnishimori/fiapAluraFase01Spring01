@@ -1,7 +1,7 @@
 package br.com.fiapbook.user.presentation.api;
 
 import br.com.fiapbook.user.application.usecase.GetAllUsersUseCase;
-import br.com.fiapbook.user.application.usecase.SaveNewUserUseCase;
+import br.com.fiapbook.user.application.usecase.CreateUserUseCase;
 import br.com.fiapbook.user.presentation.dto.UserInputDto;
 import br.com.fiapbook.user.presentation.dto.UserOutputDto;
 import jakarta.validation.Valid;
@@ -20,13 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 public class UsersApi {
 
-  private final SaveNewUserUseCase saveNewUserUseCase;
+  private final CreateUserUseCase createUserUseCase;
   private final GetAllUsersUseCase getAllUsersUseCase;
 
   public UsersApi(
-      SaveNewUserUseCase saveNewUserUseCase,
+      CreateUserUseCase createUserUseCase,
       GetAllUsersUseCase getAllUsersUseCase) {
-    this.saveNewUserUseCase = saveNewUserUseCase;
+    this.createUserUseCase = createUserUseCase;
     this.getAllUsersUseCase = getAllUsersUseCase;
   }
 
@@ -42,7 +42,7 @@ public class UsersApi {
   @ResponseStatus(HttpStatus.CREATED)
   public UserOutputDto createUser(@RequestBody @Valid UserInputDto userInputDto) {
     var user = UserInputDto.toUser(userInputDto);
-    var userCreated = saveNewUserUseCase.execute(user);
+    var userCreated = createUserUseCase.execute(user);
     return UserOutputDto.from(userCreated);
   }
 }
