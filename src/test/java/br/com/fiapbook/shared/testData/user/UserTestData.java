@@ -11,14 +11,14 @@ public class UserTestData {
         .id(uuid)
         .email("email@domain.com")
         .name("Thomas Anderson")
-        .password("123456")
+        .password("@Bcd1234")
         .build();
   }
   public static User getUserWithoutId() {
     return User.builder()
         .email("email@domain.com")
         .name("Thomas Anderson")
-        .password("123456")
+        .password("@Bcd1234")
         .build();
   }
 
