@@ -21,5 +21,4 @@ public class UserTestData {
         .password("@Bcd1234")
         .build();
   }
-
 }
