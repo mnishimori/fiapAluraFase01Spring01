@@ -2,6 +2,8 @@ package br.com.fiapbook.user.presentation.api;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import br.com.fiapbook.shared.annotation.DatabaseTest;
@@ -17,15 +19,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @IntegrationTest
 @DatabaseTest
 class GetAllUsersPaginatedApiTest {
 
+  private static final String URL_USERS = "/users";
   private final MockMvc mockMvc;
   private final EntityManager entityManager;
 
@@ -54,10 +55,10 @@ class GetAllUsersPaginatedApiTest {
     var userPage = generatePageOfUser(user);
     var userExpected = UserOutputDto.toPage(userPage);
 
-    var request = MockMvcRequestBuilders.get("/users");
+    var request = get(URL_USERS);
     var mvcResult = mockMvc.perform(request)
         .andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.content().contentType(APPLICATION_JSON))
         .andExpect(jsonPath("$.content", hasSize(1)))
         .andReturn();
 
