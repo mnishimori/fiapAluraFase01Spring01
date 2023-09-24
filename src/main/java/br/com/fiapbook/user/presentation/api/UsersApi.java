@@ -1,7 +1,7 @@
 package br.com.fiapbook.user.presentation.api;
 
-import br.com.fiapbook.user.application.usecase.GetAllUsersUseCase;
-import br.com.fiapbook.user.application.usecase.CreateUserUseCase;
+import br.com.fiapbook.user.model.usecase.GetAllUsersUseCase;
+import br.com.fiapbook.user.model.usecase.CreateUserUseCase;
 import br.com.fiapbook.user.presentation.dto.UserInputDto;
 import br.com.fiapbook.user.presentation.dto.UserOutputDto;
 import jakarta.validation.Valid;

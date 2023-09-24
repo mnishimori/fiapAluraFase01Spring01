@@ -1,4 +1,4 @@
-package br.com.fiapbook.user.application.usecase;
+package br.com.fiapbook.user.model.usecase;
 
 import br.com.fiapbook.user.model.entity.User;
 import br.com.fiapbook.user.model.service.UserService;

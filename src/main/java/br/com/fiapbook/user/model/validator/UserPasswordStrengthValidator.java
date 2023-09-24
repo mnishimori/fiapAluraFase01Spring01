@@ -1,4 +1,4 @@
-package br.com.fiapbook.user.application.validator;
+package br.com.fiapbook.user.model.validator;
 
 import br.com.fiapbook.shared.exception.ValidatorException;
 import org.springframework.stereotype.Component;

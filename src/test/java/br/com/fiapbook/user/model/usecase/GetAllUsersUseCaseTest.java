@@ -1,4 +1,4 @@
-package br.com.fiapbook.user.application.usecase;
+package br.com.fiapbook.user.model.usecase;
 
 import static br.com.fiapbook.shared.testData.user.UserTestData.getUserWithId;
 import static org.assertj.core.api.Assertions.assertThat;

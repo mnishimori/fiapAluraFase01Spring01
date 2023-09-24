@@ -1,7 +1,7 @@
-package br.com.fiapbook.user.application.usecase;
+package br.com.fiapbook.user.model.usecase;
 
-import br.com.fiapbook.user.application.validator.UserEmailAlreadyRegisteredValidator;
-import br.com.fiapbook.user.application.validator.UserPasswordStrengthValidator;
+import br.com.fiapbook.user.model.validator.UserEmailAlreadyRegisteredValidator;
+import br.com.fiapbook.user.model.validator.UserPasswordStrengthValidator;
 import br.com.fiapbook.user.model.entity.User;
 import br.com.fiapbook.user.model.service.UserService;
 import org.springframework.stereotype.Component;

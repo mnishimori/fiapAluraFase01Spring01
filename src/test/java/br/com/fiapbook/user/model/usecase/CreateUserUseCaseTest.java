@@ -1,4 +1,4 @@
-package br.com.fiapbook.user.application.usecase;
+package br.com.fiapbook.user.model.usecase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -11,9 +11,9 @@ import static org.mockito.Mockito.when;
 import br.com.fiapbook.shared.exception.DuplicatedException;
 import br.com.fiapbook.shared.exception.ValidatorException;
 import br.com.fiapbook.shared.testData.user.UserTestData;
-import br.com.fiapbook.user.application.validator.UserEmailAlreadyRegisteredValidator;
-import br.com.fiapbook.user.application.validator.UserPasswordStrengthValidator;
 import br.com.fiapbook.user.model.service.UserService;
+import br.com.fiapbook.user.model.validator.UserEmailAlreadyRegisteredValidator;
+import br.com.fiapbook.user.model.validator.UserPasswordStrengthValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

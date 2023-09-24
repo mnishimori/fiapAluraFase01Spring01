@@ -32,25 +32,23 @@ class ArchUnitTest {
   void shouldRespectTheLayers() {
     layeredArchitecture().consideringAllDependencies()
         .layer("Presentation").definedBy("..presentation..")
-        .layer("Application").definedBy("..application..")
         .layer("Model").definedBy("..model..")
         .layer("Infrastructure").definedBy("..infrastructure..")
         .whereLayer("Presentation").mayNotBeAccessedByAnyLayer()
-        .whereLayer("Application").mayOnlyBeAccessedByLayers( "Presentation")
-        .whereLayer("Model").mayOnlyBeAccessedByLayers("Application", "Presentation", "Infrastructure")
+        .whereLayer("Model").mayOnlyBeAccessedByLayers("Presentation", "Infrastructure")
         .check(mainPackages);
   }
 
   @Test
   void shouldNotExistClassesThatArentUseCases() {
-    classes().that().resideInAPackage("..application..usecase..")
+    classes().that().resideInAPackage("..model..usecase..")
         .should().haveSimpleNameEndingWith("UseCase")
         .check(mainPackages);
   }
 
   @Test
   void shouldNotImportRepositoryFromUseCase() {
-    noClasses().that().resideInAPackage("..application..usecase..")
+    noClasses().that().resideInAPackage("..model..usecase..")
         .should().dependOnClassesThat().haveSimpleNameEndingWith("Repository")
         .check(mainPackages);
   }
