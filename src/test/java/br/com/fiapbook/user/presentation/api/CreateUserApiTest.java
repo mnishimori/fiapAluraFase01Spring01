@@ -2,7 +2,9 @@ package br.com.fiapbook.user.presentation.api;
 
 import static br.com.fiapbook.shared.testData.user.UserTestData.DEFAULT_USER_EMAIL;
 import static br.com.fiapbook.shared.testData.user.UserTestData.DEFAULT_USER_NAME;
+import static br.com.fiapbook.shared.testData.user.UserTestData.DEFAULT_USER_PASSWORD;
 import static br.com.fiapbook.shared.testData.user.UserTestData.USER_INPUT;
+import static br.com.fiapbook.shared.testData.user.UserTestData.USER_TEMPLATE_INPUT;
 import static br.com.fiapbook.shared.util.IsUUID.isUUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -17,7 +19,10 @@ import br.com.fiapbook.user.model.entity.User;
 import com.jayway.jsonpath.JsonPath;
 import jakarta.persistence.EntityManager;
 import java.util.UUID;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -34,6 +39,12 @@ class CreateUserApiTest {
     this.mockMvc = mockMvc;
     this.entityManager = entityManager;
   }
+
+  @NotNull
+  private static String generateStringLength(String originalString) {
+    return String.format("%1$" + 501 + "s", originalString).replace("", "a");
+  }
+
 
   @Test
   void shouldCreateUser() throws Exception {
@@ -52,5 +63,119 @@ class CreateUserApiTest {
     assertThat(userFound).isNotNull();
     assertThat(userFound.getName()).isEqualTo(DEFAULT_USER_NAME);
     assertThat(userFound.getEmail()).isEqualTo(DEFAULT_USER_EMAIL);
+  }
+
+  @Test
+  void shouldReturnBadRequestWhenUserNameWasNotFilled() throws Exception {
+    var user = User.builder()
+        .name("")
+        .email(DEFAULT_USER_EMAIL)
+        .password(DEFAULT_USER_PASSWORD)
+        .build();
+
+    var request = post(URL_USERS)
+        .contentType(APPLICATION_JSON)
+        .content(USER_TEMPLATE_INPUT
+            .formatted(user.getName(), user.getEmail(), user.getPassword()));
+
+    mockMvc.perform(request).andExpect(status().isBadRequest());
+  }
+
+  @Test
+  void shouldReturnBadRequestWhenUserNameLengthIsGreaterThan500Characters() throws Exception {
+    var userNameIsGreaterThan500Characters = generateStringLength(DEFAULT_USER_NAME);
+    var user = User.builder()
+        .name(userNameIsGreaterThan500Characters)
+        .email(DEFAULT_USER_EMAIL)
+        .password(DEFAULT_USER_PASSWORD)
+        .build();
+
+    var request = post(URL_USERS)
+        .contentType(APPLICATION_JSON)
+        .content(USER_TEMPLATE_INPUT
+            .formatted(user.getName(), user.getEmail(), user.getPassword()));
+
+    mockMvc.perform(request).andExpect(status().isBadRequest());
+  }
+
+  @Test
+  void shouldReturnBadRequestWhenUserEmailWasNotFilled() throws Exception {
+    var user = User.builder()
+        .name(DEFAULT_USER_NAME)
+        .password(DEFAULT_USER_PASSWORD)
+        .build();
+
+    var request = post(URL_USERS)
+        .contentType(APPLICATION_JSON)
+        .content(USER_TEMPLATE_INPUT
+            .formatted(user.getName(), user.getEmail(), user.getPassword()));
+
+    mockMvc.perform(request).andExpect(status().isBadRequest());
+  }
+
+  @Test
+  void shouldReturnBadRequestWhenUserEmailLengthIsGreaterThan500Characters() throws Exception {
+    var userEmailLengthIsGreaterThan500Characters = generateStringLength(DEFAULT_USER_EMAIL);
+    var user = User.builder()
+        .name(DEFAULT_USER_NAME)
+        .email(userEmailLengthIsGreaterThan500Characters)
+        .password(DEFAULT_USER_PASSWORD)
+        .build();
+
+    var request = post(URL_USERS)
+        .contentType(APPLICATION_JSON)
+        .content(USER_TEMPLATE_INPUT
+            .formatted(user.getName(), user.getEmail(), user.getPassword()));
+
+    mockMvc.perform(request).andExpect(status().isBadRequest());
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"name.domain.com", "@", "name@", "namedomaincom"})
+  void shouldReturnBadRequestWhenUserEmailIsInvalid(String email) throws Exception {
+    var user = User.builder()
+        .name(DEFAULT_USER_NAME)
+        .email(email)
+        .password(DEFAULT_USER_PASSWORD)
+        .build();
+
+    var request = post(URL_USERS)
+        .contentType(APPLICATION_JSON)
+        .content(USER_TEMPLATE_INPUT
+            .formatted(user.getName(), user.getEmail(), user.getPassword()));
+
+    mockMvc.perform(request).andExpect(status().isBadRequest());
+  }
+
+  @Test
+  void shouldReturnBadRequestWhenUserPasswordWasNotFilled() throws Exception {
+    var user = User.builder()
+        .name(DEFAULT_USER_NAME)
+        .email(DEFAULT_USER_EMAIL)
+        .build();
+
+    var request = post(URL_USERS)
+        .contentType(APPLICATION_JSON)
+        .content(USER_TEMPLATE_INPUT
+            .formatted(user.getName(), user.getEmail(), user.getPassword()));
+
+    mockMvc.perform(request).andExpect(status().isBadRequest());
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"1", "@Bcd123", "@ABCDefghij1234567890"})
+  void shouldReturnBadRequestWhenUserPasswordIsInvalid(String password) throws Exception {
+    var user = User.builder()
+        .name(DEFAULT_USER_NAME)
+        .email(DEFAULT_USER_EMAIL)
+        .password(password)
+        .build();
+
+    var request = post(URL_USERS)
+        .contentType(APPLICATION_JSON)
+        .content(USER_TEMPLATE_INPUT
+            .formatted(user.getName(), user.getEmail(), user.getPassword()));
+
+    mockMvc.perform(request).andExpect(status().isBadRequest());
   }
 }

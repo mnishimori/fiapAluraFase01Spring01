@@ -32,7 +32,7 @@ class UserEmailAlreadyRegisteredValidatorTest {
 
   @Test
   void shouldThrowExceptionWhenUserAlreadyExists() {
-    var user = UserTestData.getUserWithoutId();
+    var user = UserTestData.getUserWithId();
     Mockito.when(userService.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
 
     assertThrows(DuplicatedException.class,
