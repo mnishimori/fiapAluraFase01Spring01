@@ -7,6 +7,9 @@ import org.springframework.data.domain.PageRequest;
 
 public class PageUtil {
 
+  public static final int PAGE_NUMBER = 0;
+  public static final int PAGE_SIZE = 1;
+
   public static PageImpl<User> generatePageOfUser(User user) {
     var pageNumber = 0;
     var pageSize = 2;
