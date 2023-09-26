@@ -50,7 +50,7 @@ tmp/**/*
 *.bak
 *.swp
 *~.nib
-local.properties
+*.properties
 .classpath
 .settings/
 .loadpath
@@ -131,18 +131,17 @@ context.xml
 server.xml
 tomcat*.xml
 
-# gradle
-*.bin
-*.lock
-.gradle/**
-.gradle/8.2.1/**
-.gradle/buildOutputCleanup/**
-build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
-
 identified-project-coordinates.json
 
-/.gradle/
+# Enterprise Architect
+*.ldb
+.factorypath
+identified-project-coordinates.json
+Documentacao/Produtivo.ldb
+
+*.properties
+
+.vscode
+/build.txt
+
 .gradle/
