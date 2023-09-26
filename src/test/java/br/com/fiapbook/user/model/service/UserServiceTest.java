@@ -135,4 +135,79 @@ class UserServiceTest {
     assertThat(usersFound.getTotalPages()).isEqualTo(size);
     assertThat(usersFound.getTotalElements()).isEqualTo(size);
   }
+
+  @Test
+  void shouldFindUserByNameAndEmailWhenUserExists() {
+    var user = getUserWithId();
+    var name = user.getName();
+    var email = user.getEmail();
+    var users = List.of(user);
+    var pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
+    var size = users.size();
+    var page = new PageImpl<>(users, pageable, size);
+    when(userRepository.queryUserByNameLikeIgnoreCaseOrEmail(name, email, pageable)).thenReturn(page);
+
+    var usersPageFound = userService.queryUserByNameLikeIgnoreCaseOrEmail(name, email, pageable);
+
+    assertThat(usersPageFound).isNotNull();
+    assertThat(usersPageFound.getSize()).isEqualTo(PAGE_SIZE);
+    assertThat(usersPageFound.getTotalPages()).isEqualTo(size);
+    assertThat(usersPageFound.getTotalElements()).isEqualTo(size);
+  }
+
+  @Test
+  void shouldFindUserByNameOnlyWhenUserExists() {
+    var user = getUserWithId();
+    var name = user.getName();
+    var email = "";
+    var users = List.of(user);
+    var pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
+    var size = users.size();
+    var page = new PageImpl<>(users, pageable, size);
+    when(userRepository.queryUserByNameLikeIgnoreCaseOrEmail(name, email, pageable)).thenReturn(page);
+
+    var usersPageFound = userService.queryUserByNameLikeIgnoreCaseOrEmail(name, email, pageable);
+
+    assertThat(usersPageFound).isNotNull();
+    assertThat(usersPageFound.getSize()).isEqualTo(PAGE_SIZE);
+    assertThat(usersPageFound.getTotalPages()).isEqualTo(size);
+    assertThat(usersPageFound.getTotalElements()).isEqualTo(size);
+  }
+
+  @Test
+  void shouldFindUserByEmailOnlyWhenUserExists() {
+    var user = getUserWithId();
+    var name = "";
+    var email = user.getEmail();
+    var users = List.of(user);
+    var pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
+    var size = users.size();
+    var page = new PageImpl<>(users, pageable, size);
+    when(userRepository.queryUserByNameLikeIgnoreCaseOrEmail(name, email, pageable)).thenReturn(page);
+
+    var usersPageFound = userService.queryUserByNameLikeIgnoreCaseOrEmail(name, email, pageable);
+
+    assertThat(usersPageFound).isNotNull();
+    assertThat(usersPageFound.getSize()).isEqualTo(PAGE_SIZE);
+    assertThat(usersPageFound.getTotalPages()).isEqualTo(size);
+    assertThat(usersPageFound.getTotalElements()).isEqualTo(size);
+  }
+
+  @Test
+  void shouldReturnEmptyPageWhenFindByNameOrEmailAndDoesNotExistAnyUserSaved() {
+    var name = "Smith";
+    var email = "smith@matrix.com";
+    var users = new ArrayList<User>();
+    var pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
+    var size = 0;
+    var page = new PageImpl<>(users, pageable, size);
+    when(userRepository.queryUserByNameLikeIgnoreCaseOrEmail(name, email, pageable)).thenReturn(page);
+
+    var usersPageFound = userService.queryUserByNameLikeIgnoreCaseOrEmail(name, email, pageable);
+
+    assertThat(usersPageFound).isNotNull();
+    assertThat(usersPageFound.getSize()).isEqualTo(PAGE_SIZE);
+    assertThat(usersPageFound.getTotalPages()).isEqualTo(size);
+    assertThat(usersPageFound.getTotalElements()).isEqualTo(size);
+  }
 }

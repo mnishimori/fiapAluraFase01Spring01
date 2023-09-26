@@ -31,4 +31,9 @@ public class UserService {
   public Page<User> findByNamePageable(String name, Pageable pageable) {
     return userRepository.findByNameLikeIgnoreCase(name, pageable);
   }
+
+  public Page<User> queryUserByNameLikeIgnoreCaseOrEmail(String name, String email,
+      Pageable pageable) {
+    return userRepository.queryUserByNameLikeIgnoreCaseOrEmail(name, email, pageable);
+  }
 }
