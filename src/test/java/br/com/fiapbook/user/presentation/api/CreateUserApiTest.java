@@ -18,6 +18,7 @@ import br.com.fiapbook.shared.annotation.IntegrationTest;
 import br.com.fiapbook.user.model.entity.User;
 import com.jayway.jsonpath.JsonPath;
 import jakarta.persistence.EntityManager;
+import java.util.Collections;
 import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
@@ -42,7 +43,7 @@ class CreateUserApiTest {
 
   @NotNull
   private static String generateStringLength(String originalString) {
-    return String.format("%1$" + 501 + "s", originalString).replace("", "a");
+    return String.join("", Collections.nCopies(501, originalString));
   }
 
 
