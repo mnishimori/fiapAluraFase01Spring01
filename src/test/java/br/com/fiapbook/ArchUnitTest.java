@@ -131,5 +131,4 @@ class ArchUnitTest {
         .should(haveEquivalentApiMethodTestClass(testPackages))
         .check(mainPackages);
   }
-
 }
