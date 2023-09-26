@@ -14,9 +14,11 @@ public class EmailValidator {
       "A-Z]{2,7}$";
 
   public void validate(String email) {
-    var validEmail = Pattern.compile(EMAIL_REGEX).matcher(email).matches();
-    if (!validEmail) {
-      throw new ValidatorException(UserMessages.USER_EMAIL_INVALID.formatted(email));
+    if (email != null && !email.isBlank()) {
+      var validEmail = Pattern.compile(EMAIL_REGEX).matcher(email).matches();
+      if (!validEmail) {
+        throw new ValidatorException(UserMessages.USER_EMAIL_INVALID.formatted(email));
+      }
     }
   }
 }

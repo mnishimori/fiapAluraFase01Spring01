@@ -8,6 +8,7 @@ import br.com.fiapbook.shared.exception.ValidatorException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -28,5 +29,11 @@ class EmailValidatorTest {
       "A@b@c@example.com", "a\"b(c)d,e:f;g<h>i[j\\k]l@example.com", "email @example.com"})
   void shouldThrowExceptionWhenEmailIsInvalid(String email) {
     assertThrows(ValidatorException.class, () -> emailValidator.validate(email));
+  }
+
+  @ParameterizedTest
+  @NullAndEmptySource
+  void shouldDoNothingWhenEmailIsNullOrEmpty(String email) {
+    assertDoesNotThrow(() -> emailValidator.validate(email));
   }
 }
