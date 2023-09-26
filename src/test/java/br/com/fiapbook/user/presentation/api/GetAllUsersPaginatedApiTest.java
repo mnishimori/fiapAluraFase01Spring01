@@ -4,23 +4,22 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import br.com.fiapbook.shared.annotation.DatabaseTest;
 import br.com.fiapbook.shared.annotation.IntegrationTest;
 import br.com.fiapbook.shared.api.JsonUtil;
+import br.com.fiapbook.shared.api.PageUtil;
 import br.com.fiapbook.shared.testData.user.UserTestData;
 import br.com.fiapbook.user.model.entity.User;
 import br.com.fiapbook.user.presentation.dto.UserContent;
 import br.com.fiapbook.user.presentation.dto.UserOutputDto;
 import jakarta.persistence.EntityManager;
-import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @IntegrationTest
 @DatabaseTest
@@ -36,14 +35,6 @@ class GetAllUsersPaginatedApiTest {
     this.entityManager = entityManager;
   }
 
-  private static PageImpl<User> generatePageOfUser(User user) {
-    var pageNumber = 0;
-    var pageSize = 2;
-    var totalItems = 3;
-    var pageable = PageRequest.of(pageNumber, pageSize);
-    return new PageImpl<>(List.of(user), pageable, totalItems);
-  }
-
   private User createUser() {
     var user = UserTestData.getUserWithoutId();
     return entityManager.merge(user);
@@ -52,13 +43,13 @@ class GetAllUsersPaginatedApiTest {
   @Test
   void shouldReturnAllUsersWhenUsersExist() throws Exception {
     var user = createUser();
-    var userPage = generatePageOfUser(user);
+    var userPage = PageUtil.generatePageOfUser(user);
     var userExpected = UserOutputDto.toPage(userPage);
 
     var request = get(URL_USERS);
     var mvcResult = mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(MockMvcResultMatchers.content().contentType(APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(APPLICATION_JSON))
         .andExpect(jsonPath("$.content", hasSize(1)))
         .andReturn();
 
