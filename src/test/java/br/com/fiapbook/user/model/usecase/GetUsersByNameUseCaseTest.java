@@ -1,5 +1,7 @@
 package br.com.fiapbook.user.model.usecase;
 
+import static br.com.fiapbook.shared.api.PageUtil.PAGE_NUMBER;
+import static br.com.fiapbook.shared.api.PageUtil.PAGE_SIZE;
 import static br.com.fiapbook.shared.testData.user.UserTestData.DEFAULT_USER_NAME;
 import static br.com.fiapbook.shared.testData.user.UserTestData.getUserWithId;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,9 +21,6 @@ import org.springframework.data.domain.PageRequest;
 
 @ExtendWith(MockitoExtension.class)
 class GetUsersByNameUseCaseTest {
-
-  private static final int PAGE_NUMBER = 0;
-  private static final int PAGE_SIZE = 1;
 
   @Mock
   private UserService userService;
