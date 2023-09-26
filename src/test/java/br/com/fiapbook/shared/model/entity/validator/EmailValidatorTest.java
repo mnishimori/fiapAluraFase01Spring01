@@ -1,0 +1,32 @@
+package br.com.fiapbook.shared.model.entity.validator;
+
+import static br.com.fiapbook.shared.testData.user.UserTestData.DEFAULT_USER_EMAIL;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import br.com.fiapbook.shared.exception.ValidatorException;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
+class EmailValidatorTest {
+
+  @Spy
+  private EmailValidator emailValidator;
+
+  @Test
+  void shouldValidateEmail() {
+    assertDoesNotThrow(() -> emailValidator.validate(DEFAULT_USER_EMAIL));
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"email.domain.com", " email.domain.com", "@", "1", "email@domain",
+      "A@b@c@example.com", "a\"b(c)d,e:f;g<h>i[j\\k]l@example.com", "email @example.com"})
+  void shouldThrowExceptionWhenEmailIsInvalid(String email) {
+    assertThrows(ValidatorException.class, () -> emailValidator.validate(email));
+  }
+}
