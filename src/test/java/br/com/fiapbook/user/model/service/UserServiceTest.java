@@ -1,11 +1,12 @@
 package br.com.fiapbook.user.model.service;
 
+import static br.com.fiapbook.shared.testData.user.UserTestData.*;
+import static br.com.fiapbook.shared.testData.user.UserTestData.getUserWithId;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import br.com.fiapbook.shared.testData.user.UserTestData;
 import br.com.fiapbook.user.infrastructure.repository.UserRepository;
 import br.com.fiapbook.user.model.entity.User;
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ class UserServiceTest {
 
   @Test
   void shouldSaveUserWhenAllUserAttributesAreCorrect() {
-    var user = UserTestData.getUserWithoutId();
+    var user = getUserWithoutId();
     when(userRepository.save(user)).then(returnsFirstArg());
 
     var userSaved = userService.save(user);
@@ -45,7 +46,7 @@ class UserServiceTest {
 
   @Test
   void shouldGetAllUsersPaginatedWhenUsersExits() {
-    var user = UserTestData.getUserWithId();
+    var user = getUserWithId();
     var users = List.of(user);
     var pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
     var size = users.size();
@@ -66,8 +67,8 @@ class UserServiceTest {
     var pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
     var size = 0;
     var page = new PageImpl<>(users, pageable, size);
-
     when(userRepository.findAll(pageable)).thenReturn(page);
+
     var usersFound = userService.getAllUsersPaginated(pageable);
 
     assertThat(usersFound).isNotNull();
@@ -78,9 +79,9 @@ class UserServiceTest {
 
   @Test
   void shouldFindUserByEmailWhenUserExists() {
-    var user = UserTestData.getUserWithId();
-
+    var user = getUserWithId();
     when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+
     var userFoundOptional = userService.findByEmail(user.getEmail());
     var userFound = userFoundOptional.orElse(null);
 
@@ -91,13 +92,47 @@ class UserServiceTest {
 
   @Test
   void shouldReturnEmptyWhenFindUserByEmailDoesNotFound() {
-    var user = UserTestData.getUserWithoutId();
-
+    var user = getUserWithoutId();
     when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.empty());
+
     var userFoundOptional = userService.findByEmail(user.getEmail());
     var userFound = userFoundOptional.orElse(null);
 
     assertThat(userFound).isNull();
   }
 
+  @Test
+  void shouldFindUserByNameWhenUserExists() {
+    var user = getUserWithId();
+    var name = user.getName();
+    var users = List.of(user);
+    var pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
+    var size = users.size();
+    var page = new PageImpl<>(users, pageable, size);
+    when(userRepository.findByNameLikeIgnoreCase(name, pageable)).thenReturn(page);
+
+    var usersPageFound = userService.findByNamePageable(name, pageable);
+
+    assertThat(usersPageFound).isNotNull();
+    assertThat(usersPageFound.getSize()).isEqualTo(PAGE_SIZE);
+    assertThat(usersPageFound.getTotalPages()).isEqualTo(size);
+    assertThat(usersPageFound.getTotalElements()).isEqualTo(size);
+  }
+
+  @Test
+  void shouldReturnEmptyPageWhenFindByNameAndDoesNotExistAnyUserSaved() {
+    var name = "Smith";
+    var users = new ArrayList<User>();
+    var pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
+    var size = 0;
+    var page = new PageImpl<>(users, pageable, size);
+    when(userRepository.findByNameLikeIgnoreCase(name, pageable)).thenReturn(page);
+
+    var usersFound = userService.findByNamePageable(name, pageable);
+
+    assertThat(usersFound).isNotNull();
+    assertThat(usersFound.getSize()).isEqualTo(PAGE_SIZE);
+    assertThat(usersFound.getTotalPages()).isEqualTo(size);
+    assertThat(usersFound.getTotalElements()).isEqualTo(size);
+  }
 }

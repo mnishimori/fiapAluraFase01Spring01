@@ -27,4 +27,8 @@ public class UserService {
   public Optional<User> findByEmail(String email) {
     return userRepository.findByEmail(email);
   }
+
+  public Page<User> findByNamePageable(String name, Pageable pageable) {
+    return userRepository.findByNameLikeIgnoreCase(name, pageable);
+  }
 }
