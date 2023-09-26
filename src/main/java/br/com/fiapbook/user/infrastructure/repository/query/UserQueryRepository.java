@@ -1,4 +1,4 @@
-package br.com.fiapbook.user.infrastructure.repository;
+package br.com.fiapbook.user.infrastructure.repository.query;
 
 import br.com.fiapbook.user.model.entity.User;
 import org.springframework.data.domain.Page;
