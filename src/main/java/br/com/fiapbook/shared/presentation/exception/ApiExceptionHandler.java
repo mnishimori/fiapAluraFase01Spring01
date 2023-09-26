@@ -3,6 +3,7 @@ package br.com.fiapbook.shared.presentation.exception;
 import br.com.fiapbook.shared.exception.DuplicatedException;
 import br.com.fiapbook.shared.exception.ValidatorException;
 import br.com.fiapbook.shared.presentation.dto.ErrorDto;
+import jakarta.persistence.NoResultException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -29,5 +30,10 @@ public class ApiExceptionHandler {
       MethodArgumentNotValidException methodArgumentNotValidException) {
     var errors = methodArgumentNotValidException.getFieldErrors();
     return ResponseEntity.badRequest().body(errors.stream().map(ErrorDto::new).toList());
+  }
+
+  @ExceptionHandler(NoResultException.class)
+  public ResponseEntity handlerNoResultException() {
+    return ResponseEntity.notFound().build();
   }
 }
