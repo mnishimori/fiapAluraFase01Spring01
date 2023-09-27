@@ -1,6 +1,5 @@
 package br.com.fiapbook.user.model.validator;
 
-import static br.com.fiapbook.user.model.messages.UserMessages.USER_PASSWORD_CANNOT_BE_NULL_OR_EMPTY;
 import static br.com.fiapbook.user.model.messages.UserMessages.USER_PASSWORD_MUST_HAVE_AT_LEAST_ONE_LOWER_CHAR;
 import static br.com.fiapbook.user.model.messages.UserMessages.USER_PASSWORD_MUST_HAVE_AT_LEAST_ONE_NUMBER_CHAR;
 import static br.com.fiapbook.user.model.messages.UserMessages.USER_PASSWORD_MUST_HAVE_AT_LEAST_ONE_SPECIAL_CHAR;
@@ -17,18 +16,11 @@ public class UserPasswordStrengthValidator {
   }
 
   public void validate(String password) {
-    validateNullOrEmptyPassword(password);
     validateNumberInPassword(password);
     validateLowerCharacterInPassword(password);
     validateUpperCharacterInPassword(password);
     validateSpecialCharacterInPassword(password);
     validateNumberOfCharacterInPassword(password);
-  }
-
-  private void validateNullOrEmptyPassword(String password) {
-    if (password == null || password.isBlank()) {
-      throw new ValidatorException(USER_PASSWORD_CANNOT_BE_NULL_OR_EMPTY);
-    }
   }
 
   private void validateNumberInPassword(String password) {

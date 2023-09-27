@@ -23,6 +23,7 @@ import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
@@ -149,6 +150,22 @@ class CreateUserApiTest {
   }
 
   @Test
+  void shouldReturnBadRequestWhenUserEmailAlreadyExits() throws Exception {
+    var user = User.builder()
+        .name(DEFAULT_USER_NAME)
+        .email(DEFAULT_USER_EMAIL)
+        .password(DEFAULT_USER_PASSWORD)
+        .build();
+    entityManager.persist(user);
+
+    var request = post(URL_USERS)
+        .contentType(APPLICATION_JSON)
+        .content(USER_INPUT);
+
+    mockMvc.perform(request).andExpect(status().isConflict());
+  }
+
+  @Test
   void shouldReturnBadRequestWhenUserPasswordWasNotFilled() throws Exception {
     var user = User.builder()
         .name(DEFAULT_USER_NAME)
@@ -164,7 +181,24 @@ class CreateUserApiTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"1", "@Bcd123", "@ABCDefghij1234567890"})
+  @NullAndEmptySource
+  void shouldReturnBadRequestWhenUserPasswordIsNullOrEmpty(String password) throws Exception {
+    var user = User.builder()
+        .name(DEFAULT_USER_NAME)
+        .email(DEFAULT_USER_EMAIL)
+        .password(password)
+        .build();
+
+    var request = post(URL_USERS)
+        .contentType(APPLICATION_JSON)
+        .content(USER_TEMPLATE_INPUT
+            .formatted(user.getName(), user.getEmail(), user.getPassword()));
+
+    mockMvc.perform(request).andExpect(status().isBadRequest());
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"abcdefghijk", "0ABCDEFGHI", "abcd1234", "Abcd1234", "@BcdefgHiJk0123456789"})
   void shouldReturnBadRequestWhenUserPasswordIsInvalid(String password) throws Exception {
     var user = User.builder()
         .name(DEFAULT_USER_NAME)
