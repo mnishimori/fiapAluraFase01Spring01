@@ -20,7 +20,6 @@ import com.jayway.jsonpath.JsonPath;
 import jakarta.persistence.EntityManager;
 import java.util.Collections;
 import java.util.UUID;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
@@ -30,23 +29,21 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @IntegrationTest
 @DatabaseTest
-class CreateUserApiTest {
+class PostUserApiTest {
 
   private static final String URL_USERS = "/users";
   private final MockMvc mockMvc;
   private final EntityManager entityManager;
 
   @Autowired
-  public CreateUserApiTest(MockMvc mockMvc, EntityManager entityManager) {
+  public PostUserApiTest(MockMvc mockMvc, EntityManager entityManager) {
     this.mockMvc = mockMvc;
     this.entityManager = entityManager;
   }
 
-  @NotNull
   private static String generateStringLength(String originalString) {
     return String.join("", Collections.nCopies(501, originalString));
   }
-
 
   @Test
   void shouldCreateUser() throws Exception {

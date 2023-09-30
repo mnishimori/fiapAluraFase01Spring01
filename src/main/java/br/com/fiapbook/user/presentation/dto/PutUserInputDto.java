@@ -5,24 +5,20 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 
-public record UserInputDto(
+public record PutUserInputDto(
     @NotBlank(message = "Name is required.")
     @Length(max = 500, message = "Max name length is 500 characters.")
     String name,
     @NotBlank(message = "email is required.")
     @Length(max = 500, message = "Max email length is 500 characters.")
     @Email
-    String email,
-    @NotBlank(message = "Password is required.")
-    @Length(min = 8, max = 20, message = "Min password length is 8 characters and max password length is 20 characters.")
-    String password
+    String email
 ) {
 
-  public static User toUser(UserInputDto userInputDto) {
+  public static User toUser(PutUserInputDto putUserInputDto) {
     return User.builder()
-        .name(userInputDto.name)
-        .email(userInputDto.email)
-        .password(userInputDto.password)
+        .name(putUserInputDto.name)
+        .email(putUserInputDto.email)
         .build();
   }
 }

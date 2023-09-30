@@ -6,8 +6,10 @@ import br.com.fiapbook.user.model.usecase.GetUserByEmailUseCase;
 import br.com.fiapbook.user.model.usecase.GetUserByIdUseCase;
 import br.com.fiapbook.user.model.usecase.GetUsersByNameOrEmailUseCase;
 import br.com.fiapbook.user.model.usecase.GetUsersByNameUseCase;
+import br.com.fiapbook.user.model.usecase.UpdateUserUseCase;
+import br.com.fiapbook.user.presentation.dto.PutUserInputDto;
 import br.com.fiapbook.user.presentation.dto.UserFilter;
-import br.com.fiapbook.user.presentation.dto.UserInputDto;
+import br.com.fiapbook.user.presentation.dto.PostUserInputDto;
 import br.com.fiapbook.user.presentation.dto.UserOutputDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -18,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -33,6 +36,7 @@ public class UsersApi {
   private final GetUsersByNameUseCase getUsersByNameUseCase;
   private final GetUserByIdUseCase getUserByIdUseCase;
   private final GetUsersByNameOrEmailUseCase getUsersByNameOrEmailUseCase;
+  private final UpdateUserUseCase updateUserUseCase;
 
   public UsersApi(
       CreateUserUseCase createUserUseCase,
@@ -40,13 +44,15 @@ public class UsersApi {
       GetUserByEmailUseCase getUserByEmailUseCase,
       GetUsersByNameUseCase getUsersByNameUseCase,
       GetUserByIdUseCase getUserByIdUseCase,
-      GetUsersByNameOrEmailUseCase getUsersByNameOrEmailUseCase) {
+      GetUsersByNameOrEmailUseCase getUsersByNameOrEmailUseCase,
+      UpdateUserUseCase updateUserUseCase) {
     this.createUserUseCase = createUserUseCase;
     this.getAllUsersUseCase = getAllUsersUseCase;
     this.getUserByEmailUseCase = getUserByEmailUseCase;
     this.getUsersByNameUseCase = getUsersByNameUseCase;
     this.getUserByIdUseCase = getUserByIdUseCase;
     this.getUsersByNameOrEmailUseCase = getUsersByNameOrEmailUseCase;
+    this.updateUserUseCase = updateUserUseCase;
   }
 
   @GetMapping
@@ -59,8 +65,8 @@ public class UsersApi {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public UserOutputDto createUser(@RequestBody @Valid UserInputDto userInputDto) {
-    var user = UserInputDto.toUser(userInputDto);
+  public UserOutputDto postUser(@RequestBody @Valid PostUserInputDto postUserInputDto) {
+    var user = PostUserInputDto.toUser(postUserInputDto);
     var userCreated = createUserUseCase.execute(user);
     return UserOutputDto.from(userCreated);
   }
@@ -94,5 +100,13 @@ public class UsersApi {
     var usersPage = getUsersByNameOrEmailUseCase.execute(userFilter.name(), userFilter.email(),
         pageable);
     return !usersPage.getContent().isEmpty() ? UserOutputDto.toPage(usersPage) : Page.empty();
+  }
+
+  @PutMapping("/{userUuid}")
+  @ResponseStatus(HttpStatus.ACCEPTED)
+  public UserOutputDto putUser(@PathVariable String userUuid, @RequestBody @Valid PutUserInputDto putUserInputDto) {
+    var user = PutUserInputDto.toUser(putUserInputDto);
+    var userUpdated = updateUserUseCase.execute(userUuid, user);
+    return UserOutputDto.from(userUpdated);
   }
 }
