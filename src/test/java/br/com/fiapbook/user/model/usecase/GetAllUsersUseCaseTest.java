@@ -59,5 +59,4 @@ class GetAllUsersUseCaseTest {
     assertThat(usersFound.getTotalPages()).isEqualTo(size);
     assertThat(usersFound.getTotalElements()).isEqualTo(size);
   }
-
 }
