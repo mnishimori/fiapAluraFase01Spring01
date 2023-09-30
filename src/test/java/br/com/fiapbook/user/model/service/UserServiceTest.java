@@ -1,7 +1,7 @@
 package br.com.fiapbook.user.model.service;
 
 import static br.com.fiapbook.shared.testData.user.UserTestData.*;
-import static br.com.fiapbook.shared.testData.user.UserTestData.getUserWithId;
+import static br.com.fiapbook.shared.testData.user.UserTestData.createUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Mockito.verify;
@@ -12,6 +12,7 @@ import br.com.fiapbook.user.model.entity.User;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -33,7 +34,7 @@ class UserServiceTest {
 
   @Test
   void shouldSaveUserWhenAllUserAttributesAreCorrect() {
-    var user = getUserWithoutId();
+    var user = createNewUser();
     when(userRepository.save(user)).then(returnsFirstArg());
 
     var userSaved = userService.save(user);
@@ -46,7 +47,7 @@ class UserServiceTest {
 
   @Test
   void shouldGetAllUsersPaginatedWhenUsersExits() {
-    var user = getUserWithId();
+    var user = createUser();
     var users = List.of(user);
     var pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
     var size = users.size();
@@ -79,7 +80,7 @@ class UserServiceTest {
 
   @Test
   void shouldFindUserByEmailWhenUserExists() {
-    var user = getUserWithId();
+    var user = createUser();
     when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
 
     var userFoundOptional = userService.findByEmail(user.getEmail());
@@ -91,8 +92,8 @@ class UserServiceTest {
   }
 
   @Test
-  void shouldReturnEmptyWhenFindUserByEmailDoesNotFound() {
-    var user = getUserWithoutId();
+  void shouldReturnEmptyWhenFindUserByEmailDoesNotExist() {
+    var user = createNewUser();
     when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.empty());
 
     var userFoundOptional = userService.findByEmail(user.getEmail());
@@ -103,7 +104,7 @@ class UserServiceTest {
 
   @Test
   void shouldFindUserByNameWhenUserExists() {
-    var user = getUserWithId();
+    var user = createUser();
     var name = user.getName();
     var users = List.of(user);
     var pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
@@ -138,7 +139,7 @@ class UserServiceTest {
 
   @Test
   void shouldFindUserByNameAndEmailWhenUserExists() {
-    var user = getUserWithId();
+    var user = createUser();
     var name = user.getName();
     var email = user.getEmail();
     var users = List.of(user);
@@ -157,7 +158,7 @@ class UserServiceTest {
 
   @Test
   void shouldFindUserByNameOnlyWhenUserExists() {
-    var user = getUserWithId();
+    var user = createUser();
     var name = user.getName();
     var email = "";
     var users = List.of(user);
@@ -176,7 +177,7 @@ class UserServiceTest {
 
   @Test
   void shouldFindUserByEmailOnlyWhenUserExists() {
-    var user = getUserWithId();
+    var user = createUser();
     var name = "";
     var email = user.getEmail();
     var users = List.of(user);
@@ -209,5 +210,28 @@ class UserServiceTest {
     assertThat(usersPageFound.getSize()).isEqualTo(PAGE_SIZE);
     assertThat(usersPageFound.getTotalPages()).isEqualTo(size);
     assertThat(usersPageFound.getTotalElements()).isEqualTo(size);
+  }
+
+  @Test
+  void shouldFindUserByIdWhenUserExists() {
+    var user = createUser();
+    when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+
+    var userFoundOptional = userService.findById(user.getId());
+    var userFound = userFoundOptional.orElse(null);
+
+    assertThat(userFound).isNotNull();
+    assertThat(userFound.getName()).isEqualTo(user.getName());
+    assertThat(userFound.getEmail()).isEqualTo(user.getEmail());
+  }
+
+  @Test
+  void shouldReturnEmptyWhenFindUserByIdDoesNotExist() {
+    var uuid = UUID.randomUUID();
+    when(userRepository.findById(uuid)).thenReturn(Optional.empty());
+
+    var userFound = userService.findById(uuid);
+
+    assertThat(userFound.isPresent()).isEqualTo(Boolean.FALSE);
   }
 }

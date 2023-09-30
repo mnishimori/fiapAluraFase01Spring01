@@ -16,7 +16,7 @@ public class UserTestData {
       DEFAULT_USER_EMAIL,
       DEFAULT_USER_PASSWORD);
 
-  public static User getUserWithId() {
+  public static User createUser() {
     var uuid = UUID.randomUUID();
     return User.builder()
         .id(uuid)
@@ -26,7 +26,7 @@ public class UserTestData {
         .build();
   }
 
-  public static User getUserWithoutId() {
+  public static User createNewUser() {
     return User.builder()
         .email("email@domain.com")
         .name("Thomas Anderson")

@@ -36,7 +36,7 @@ class GetAllUsersPaginatedApiTest {
   }
 
   private User createUser() {
-    var user = UserTestData.getUserWithoutId();
+    var user = UserTestData.createNewUser();
     return entityManager.merge(user);
   }
 

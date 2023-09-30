@@ -3,6 +3,7 @@ package br.com.fiapbook.user.model.service;
 import br.com.fiapbook.user.model.entity.User;
 import br.com.fiapbook.user.infrastructure.repository.UserRepository;
 import java.util.Optional;
+import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -35,5 +36,9 @@ public class UserService {
   public Page<User> queryUserByNameLikeIgnoreCaseOrEmail(String name, String email,
       Pageable pageable) {
     return userRepository.queryUserByNameLikeIgnoreCaseOrEmail(name, email, pageable);
+  }
+
+  public Optional<User> findById(UUID uuid) {
+    return userRepository.findById(uuid);
   }
 }

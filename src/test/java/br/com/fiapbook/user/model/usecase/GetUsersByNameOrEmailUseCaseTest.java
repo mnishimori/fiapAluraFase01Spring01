@@ -4,7 +4,7 @@ import static br.com.fiapbook.shared.api.PageUtil.PAGE_NUMBER;
 import static br.com.fiapbook.shared.api.PageUtil.PAGE_SIZE;
 import static br.com.fiapbook.shared.testData.user.UserTestData.DEFAULT_USER_EMAIL;
 import static br.com.fiapbook.shared.testData.user.UserTestData.DEFAULT_USER_NAME;
-import static br.com.fiapbook.shared.testData.user.UserTestData.getUserWithId;
+import static br.com.fiapbook.shared.testData.user.UserTestData.createUser;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -34,7 +34,7 @@ class GetUsersByNameOrEmailUseCaseTest {
 
   @Test
   void shouldFindUsersByNameOrEmailWhenUserExists() {
-    var user = getUserWithId();
+    var user = createUser();
     var userName = user.getName();
     var userEmail = user.getEmail();
     var users = List.of(user);
@@ -54,7 +54,7 @@ class GetUsersByNameOrEmailUseCaseTest {
 
   @Test
   void shouldFindUsersByNameWhenUserExists() {
-    var user = getUserWithId();
+    var user = createUser();
     var userName = user.getName();
     var userEmail = "";
     var users = List.of(user);
@@ -74,7 +74,7 @@ class GetUsersByNameOrEmailUseCaseTest {
 
   @Test
   void shouldFindUsersByEmailWhenUserExists() {
-    var user = getUserWithId();
+    var user = createUser();
     var userName = "";
     var userEmail = user.getEmail();
     var users = List.of(user);

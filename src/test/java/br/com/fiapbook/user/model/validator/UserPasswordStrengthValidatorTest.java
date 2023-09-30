@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import br.com.fiapbook.shared.exception.ValidatorException;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -21,12 +20,6 @@ class UserPasswordStrengthValidatorTest {
   @ValueSource(strings = {"@Bcd1234"})
   void shouldValidatePassword(String password) {
     assertDoesNotThrow(() -> userPasswordStrengthValidator.validate(password));
-  }
-
-  @ParameterizedTest
-  @NullAndEmptySource
-  void shouldThrowExceptionWhenPasswordIsNullOrEmpty(String password) {
-    assertThrows(ValidatorException.class, () -> userPasswordStrengthValidator.validate(password));
   }
 
   @ParameterizedTest

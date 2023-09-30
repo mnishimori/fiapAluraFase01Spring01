@@ -1,6 +1,6 @@
 package br.com.fiapbook.user.model.usecase;
 
-import static br.com.fiapbook.shared.testData.user.UserTestData.getUserWithId;
+import static br.com.fiapbook.shared.testData.user.UserTestData.createUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -29,7 +29,7 @@ class GetAllUsersUseCaseTest {
 
   @Test
   void shouldGetAllUsersWhenUsersExists() {
-    var user = getUserWithId();
+    var user = createUser();
     var users = List.of(user);
     var pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
     var size = users.size();

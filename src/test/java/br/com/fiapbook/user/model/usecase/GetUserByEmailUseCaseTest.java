@@ -1,7 +1,7 @@
 package br.com.fiapbook.user.model.usecase;
 
 import static br.com.fiapbook.shared.testData.user.UserTestData.DEFAULT_USER_EMAIL;
-import static br.com.fiapbook.shared.testData.user.UserTestData.getUserWithId;
+import static br.com.fiapbook.shared.testData.user.UserTestData.createUser;
 import static br.com.fiapbook.user.model.messages.UserMessages.USER_EMAIL_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -30,7 +30,7 @@ class GetUserByEmailUseCaseTest {
 
   @Test
   void shouldGetUserByEmailWhenUserExists() {
-    var user = getUserWithId();
+    var user = createUser();
     var userEmail = user.getEmail();
     when(userService.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
 

@@ -1,6 +1,5 @@
 package br.com.fiapbook.user.presentation.api;
 
-import static br.com.fiapbook.shared.testData.user.UserTestData.DEFAULT_USER_EMAIL;
 import static br.com.fiapbook.shared.testData.user.UserTestData.createNewUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -14,39 +13,39 @@ import br.com.fiapbook.shared.api.JsonUtil;
 import br.com.fiapbook.user.model.entity.User;
 import br.com.fiapbook.user.presentation.dto.UserOutputDto;
 import jakarta.persistence.EntityManager;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @IntegrationTest
 @DatabaseTest
-class GetUserByEmailApiTest {
+class GetUserByIdApiTest {
 
-  private static final String URL_USERS = "/users/email/";
+  private static final String URL_USERS = "/users/";
   private final MockMvc mockMvc;
   private final EntityManager entityManager;
 
   @Autowired
-  public GetUserByEmailApiTest(
+  public GetUserByIdApiTest(
       MockMvc mockMvc,
       EntityManager entityManager) {
     this.mockMvc = mockMvc;
     this.entityManager = entityManager;
   }
 
-  private User createUser() {
+  private User createAndPersistNewUser() {
     var user = createNewUser();
     return entityManager.merge(user);
   }
 
   @Test
-  void shouldReturnUserWhenUserExists() throws Exception {
-    var user = createUser();
-    var userDtoExpected = UserOutputDto.from(user);
+  void shoudReturnUserWhenUserExists() throws Exception {
+    var user = createAndPersistNewUser();
+    var userOutputDtoExpected = UserOutputDto.from(user);
 
-    var request = get(URL_USERS + user.getEmail());
+    var request = get(URL_USERS + user.getId());
     var mvcResult = mockMvc.perform(request)
         .andExpect(status().isOk())
         .andExpect(content().contentType(APPLICATION_JSON))
@@ -55,20 +54,19 @@ class GetUserByEmailApiTest {
     var contentAsString = mvcResult.getResponse().getContentAsString();
     var userFound = JsonUtil.fromJson(contentAsString, User.class);
     var userDtoFound = UserOutputDto.from(userFound);
-    assertThat(userDtoFound).usingRecursiveComparison().isEqualTo(userDtoExpected);
+    assertThat(userDtoFound).usingRecursiveComparison().isEqualTo(userOutputDtoExpected);
   }
 
   @Test
   void shouldReturnNotFoundWhenUserDoesNotExist() throws Exception {
-    var request = get(URL_USERS + DEFAULT_USER_EMAIL);
+    var request = MockMvcRequestBuilders.get(URL_USERS + UUID.randomUUID());
     mockMvc.perform(request)
         .andExpect(status().isNotFound());
   }
 
-  @ParameterizedTest
-  @ValueSource(strings = {"email.domain.com", "@", "1234", "x@y.z"})
-  void shouldReturnBadRequestWhenUserEmailIsInvalid(String email) throws Exception {
-    var request = get(URL_USERS + email);
+  @Test
+  void shouldReturnBadRequestWhenUserUuidIsInvalid() throws Exception {
+    var request = MockMvcRequestBuilders.get(URL_USERS + "aaa");
     mockMvc.perform(request)
         .andExpect(status().isBadRequest());
   }

@@ -35,7 +35,7 @@ class CreateUserUseCaseTest {
 
   @Test
   void shouldCreateNewUserWhenAllUserAttributesAreCorrect() {
-    var user = UserTestData.getUserWithoutId();
+    var user = UserTestData.createNewUser();
     var originalPassword = user.getPassword();
     when(userService.save(user)).then(returnsFirstArg());
 
@@ -51,7 +51,7 @@ class CreateUserUseCaseTest {
 
   @Test
   void shouldThrowExceptionWhenUserPasswordIsInvalid() {
-    var user = UserTestData.getUserWithoutId();
+    var user = UserTestData.createNewUser();
     user.setPassword("123456");
 
     assertThatThrownBy(() -> createUserUseCase.execute(user)).isInstanceOf(
@@ -64,7 +64,7 @@ class CreateUserUseCaseTest {
 
   @Test
   void shouldThrowExceptionWhenUserAlreadyExists() {
-    var user = UserTestData.getUserWithoutId();
+    var user = UserTestData.createNewUser();
     doThrow(DuplicatedException.class).when(userEmailAlreadyRegisteredValidator)
         .validate(user.getEmail());
 
