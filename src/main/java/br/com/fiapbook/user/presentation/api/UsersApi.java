@@ -1,6 +1,5 @@
 package br.com.fiapbook.user.presentation.api;
 
-import br.com.fiapbook.user.infrastructure.repository.UserRepository;
 import br.com.fiapbook.user.model.usecase.CreateUserUseCase;
 import br.com.fiapbook.user.model.usecase.GetAllUsersUseCase;
 import br.com.fiapbook.user.model.usecase.GetUserByEmailUseCase;
@@ -41,7 +40,7 @@ public class UsersApi {
       GetUserByEmailUseCase getUserByEmailUseCase,
       GetUsersByNameUseCase getUsersByNameUseCase,
       GetUserByIdUseCase getUserByIdUseCase,
-      GetUsersByNameOrEmailUseCase getUsersByNameOrEmailUseCase, UserRepository userRepository) {
+      GetUsersByNameOrEmailUseCase getUsersByNameOrEmailUseCase) {
     this.createUserUseCase = createUserUseCase;
     this.getAllUsersUseCase = getAllUsersUseCase;
     this.getUserByEmailUseCase = getUserByEmailUseCase;
@@ -94,6 +93,6 @@ public class UsersApi {
       @PageableDefault(sort = {"name"}) Pageable pageable) {
     var usersPage = getUsersByNameOrEmailUseCase.execute(userFilter.name(), userFilter.email(),
         pageable);
-    return UserOutputDto.toPage(usersPage);
+    return !usersPage.getContent().isEmpty() ? UserOutputDto.toPage(usersPage) : Page.empty();
   }
 }

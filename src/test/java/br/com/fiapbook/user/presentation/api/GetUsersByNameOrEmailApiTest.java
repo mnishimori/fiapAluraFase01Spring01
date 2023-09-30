@@ -16,6 +16,7 @@ import br.com.fiapbook.user.presentation.dto.UserOutputDto;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -41,7 +42,7 @@ class GetUsersByNameOrEmailApiTest {
   }
 
   @Test
-  void shouldReturnUserWhenUserAlreadyExistsByName() throws Exception {
+  void shouldReturnUserWhenFindUserByNameAndUserAlreadyExists() throws Exception {
     var user = createAndSaveUser();
     var userPage = PageUtil.generatePageOfUser(user);
     var userOutputDtoExpected = UserOutputDto.toPage(userPage);
@@ -59,7 +60,7 @@ class GetUsersByNameOrEmailApiTest {
   }
 
   @Test
-  void shouldReturnUserWhenUserAlreadyExistsByEmail() throws Exception {
+  void shouldReturnUserWhenFindUserByEmailAndUserAlreadyExists() throws Exception {
     var user = createAndSaveUser();
     var userPage = PageUtil.generatePageOfUser(user);
     var userOutputDtoExpected = UserOutputDto.toPage(userPage);
@@ -77,7 +78,7 @@ class GetUsersByNameOrEmailApiTest {
   }
 
   @Test
-  void shouldReturnUserWhenUserAlreadyExistsByNameAndEmail() throws Exception {
+  void shouldReturnUserWhenFindUserByNameAndEmailAndUserAlreadyExists() throws Exception {
     var user = createAndSaveUser();
     var userPage = PageUtil.generatePageOfUser(user);
     var userOutputDtoExpected = UserOutputDto.toPage(userPage);
@@ -93,5 +94,77 @@ class GetUsersByNameOrEmailApiTest {
     var contentAsString = mvcResult.getResponse().getContentAsString();
     var userFound = JsonUtil.fromJson(contentAsString, UserContent.class);
     assertThat(userFound.getContent()).usingRecursiveComparison().isEqualTo(userOutputDtoExpected);
+  }
+
+  @Test
+  void shouldReturnAllUsersWhenNameAndEmailAreEmptyUserAlreadyExists() throws Exception {
+    var user = createAndSaveUser();
+    var userPage = PageUtil.generatePageOfUser(user);
+    var userOutputDtoExpected = UserOutputDto.toPage(userPage);
+
+    var request = get(URL_USERS)
+        .param("name", "")
+        .param("email", "");
+    var mvcResult = mockMvc.perform(request)
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andReturn();
+
+    var contentAsString = mvcResult.getResponse().getContentAsString();
+    var userFound = JsonUtil.fromJson(contentAsString, UserContent.class);
+    assertThat(userFound.getContent()).usingRecursiveComparison().isEqualTo(userOutputDtoExpected);
+  }
+
+  @Test
+  void shouldReturnAllUsersWhenNameAndEmailParametersWereNotInformedAndUserAlreadyExists() throws Exception {
+    var user = createAndSaveUser();
+    var userPage = PageUtil.generatePageOfUser(user);
+    var userOutputDtoExpected = UserOutputDto.toPage(userPage);
+
+    var request = get(URL_USERS);
+    var mvcResult = mockMvc.perform(request)
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andReturn();
+
+    var contentAsString = mvcResult.getResponse().getContentAsString();
+    var userFound = JsonUtil.fromJson(contentAsString, UserContent.class);
+    assertThat(userFound.getContent()).usingRecursiveComparison().isEqualTo(userOutputDtoExpected);
+  }
+
+  @Test
+  void shouldReturnNothingWhenFindUserByNameAndUserDoesNotExists() throws Exception {
+    createAndSaveUser();
+    var userPageOutputDtoExpected = Page.empty();
+
+    var request = get(URL_USERS)
+        .param("name", "Agent Smith")
+        .param("email", "");
+    var mvcResult = mockMvc.perform(request)
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andReturn();
+
+    var contentAsString = mvcResult.getResponse().getContentAsString();
+    var userFound = JsonUtil.fromJson(contentAsString, UserContent.class);
+    assertThat(userFound.getContent()).usingRecursiveComparison().isEqualTo(userPageOutputDtoExpected);
+  }
+
+  @Test
+  void shouldReturnNothingWhenFindUserByEmailAndUserDoesNotExists() throws Exception {
+    createAndSaveUser();
+    var userPageOutputDtoExpected = Page.empty();
+
+    var request = get(URL_USERS)
+        .param("name", "")
+        .param("email", "smith@matrix.com");
+    var mvcResult = mockMvc.perform(request)
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andReturn();
+
+    var contentAsString = mvcResult.getResponse().getContentAsString();
+    var userFound = JsonUtil.fromJson(contentAsString, UserContent.class);
+    assertThat(userFound.getContent()).usingRecursiveComparison().isEqualTo(userPageOutputDtoExpected);
   }
 }

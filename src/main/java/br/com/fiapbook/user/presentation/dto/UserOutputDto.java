@@ -10,9 +10,9 @@ public record UserOutputDto(
 ) {
 
   public UserOutputDto(User user) {
-    this(user.getId().toString(),
-        user.getName(),
-        user.getEmail());
+      this(user.getId() != null ? user.getId().toString() : null,
+          user.getName(),
+          user.getEmail());
   }
 
   public static Page<UserOutputDto> toPage(Page<User> usersPage) {
