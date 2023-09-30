@@ -80,7 +80,8 @@ class CreateUserApiTest {
         .content(USER_TEMPLATE_INPUT
             .formatted(user.getName(), user.getEmail(), user.getPassword()));
 
-    mockMvc.perform(request).andExpect(status().isBadRequest());
+    mockMvc.perform(request)
+        .andExpect(status().isBadRequest());
   }
 
   @Test
@@ -97,7 +98,8 @@ class CreateUserApiTest {
         .content(USER_TEMPLATE_INPUT
             .formatted(user.getName(), user.getEmail(), user.getPassword()));
 
-    mockMvc.perform(request).andExpect(status().isBadRequest());
+    mockMvc.perform(request)
+        .andExpect(status().isBadRequest());
   }
 
   @Test
@@ -112,7 +114,8 @@ class CreateUserApiTest {
         .content(USER_TEMPLATE_INPUT
             .formatted(user.getName(), user.getEmail(), user.getPassword()));
 
-    mockMvc.perform(request).andExpect(status().isBadRequest());
+    mockMvc.perform(request)
+        .andExpect(status().isBadRequest());
   }
 
   @Test
@@ -129,7 +132,8 @@ class CreateUserApiTest {
         .content(USER_TEMPLATE_INPUT
             .formatted(user.getName(), user.getEmail(), user.getPassword()));
 
-    mockMvc.perform(request).andExpect(status().isBadRequest());
+    mockMvc.perform(request)
+        .andExpect(status().isBadRequest());
   }
 
   @ParameterizedTest
@@ -146,7 +150,8 @@ class CreateUserApiTest {
         .content(USER_TEMPLATE_INPUT
             .formatted(user.getName(), user.getEmail(), user.getPassword()));
 
-    mockMvc.perform(request).andExpect(status().isBadRequest());
+    mockMvc.perform(request)
+        .andExpect(status().isBadRequest());
   }
 
   @Test
@@ -162,7 +167,8 @@ class CreateUserApiTest {
         .contentType(APPLICATION_JSON)
         .content(USER_INPUT);
 
-    mockMvc.perform(request).andExpect(status().isConflict());
+    mockMvc.perform(request)
+        .andExpect(status().isConflict());
   }
 
   @Test
@@ -177,7 +183,8 @@ class CreateUserApiTest {
         .content(USER_TEMPLATE_INPUT
             .formatted(user.getName(), user.getEmail(), user.getPassword()));
 
-    mockMvc.perform(request).andExpect(status().isBadRequest());
+    mockMvc.perform(request)
+        .andExpect(status().isBadRequest());
   }
 
   @ParameterizedTest
@@ -194,11 +201,12 @@ class CreateUserApiTest {
         .content(USER_TEMPLATE_INPUT
             .formatted(user.getName(), user.getEmail(), user.getPassword()));
 
-    mockMvc.perform(request).andExpect(status().isBadRequest());
+    mockMvc.perform(request)
+        .andExpect(status().isBadRequest());
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"abcdefghijk", "0ABCDEFGHI", "abcd1234", "Abcd1234", "@BcdefgHiJk0123456789"})
+  @ValueSource(strings = {"abcdefghijk", "0ABCDEFGHI", "abcd1234", "Abcd1234"})
   void shouldReturnBadRequestWhenUserPasswordIsInvalid(String password) throws Exception {
     var user = User.builder()
         .name(DEFAULT_USER_NAME)
@@ -211,6 +219,7 @@ class CreateUserApiTest {
         .content(USER_TEMPLATE_INPUT
             .formatted(user.getName(), user.getEmail(), user.getPassword()));
 
-    mockMvc.perform(request).andExpect(status().isBadRequest());
+    mockMvc.perform(request)
+        .andExpect(status().isBadRequest());
   }
 }

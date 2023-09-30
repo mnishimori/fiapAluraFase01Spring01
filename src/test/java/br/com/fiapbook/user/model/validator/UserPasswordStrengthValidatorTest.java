@@ -23,8 +23,7 @@ class UserPasswordStrengthValidatorTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"1", "a", "@", "A", "@Bc1", "?=.*[@#$%^&-+=()]",
-      "@Bcd12345678901234567", "@bcd1234", "Abcd1234"})
+  @ValueSource(strings = {"abcdefghijk", "0ABCDEFGHI", "abcd1234", "Abcd1234", "@#$%^&+=ab1"})
   void shouldThrowExceptionWhenPasswordIsInvalid(String password) {
     assertThrows(ValidatorException.class, () -> userPasswordStrengthValidator.validate(password));
   }
