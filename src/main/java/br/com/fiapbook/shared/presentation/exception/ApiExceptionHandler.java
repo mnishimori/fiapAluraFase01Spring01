@@ -14,26 +14,26 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ApiExceptionHandler {
 
   @ExceptionHandler(DuplicatedException.class)
-  public ResponseEntity handlerDuplicatedException(DuplicatedException duplicatedException) {
+  public ResponseEntity<?> handlerDuplicatedException(DuplicatedException duplicatedException) {
     var error = duplicatedException.getMessage();
     return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
   }
 
   @ExceptionHandler(ValidatorException.class)
-  public ResponseEntity handlerValidatorException(ValidatorException validatorException) {
+  public ResponseEntity<?> handlerValidatorException(ValidatorException validatorException) {
     var error = validatorException.getMessage();
     return ResponseEntity.badRequest().body(error);
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity handlerMethodArgumentNotValidException(
+  public ResponseEntity<?> handlerMethodArgumentNotValidException(
       MethodArgumentNotValidException methodArgumentNotValidException) {
     var errors = methodArgumentNotValidException.getFieldErrors();
     return ResponseEntity.badRequest().body(errors.stream().map(ErrorDto::new).toList());
   }
 
   @ExceptionHandler(NoResultException.class)
-  public ResponseEntity handlerNoResultException() {
+  public ResponseEntity<?> handlerNoResultException() {
     return ResponseEntity.notFound().build();
   }
 }

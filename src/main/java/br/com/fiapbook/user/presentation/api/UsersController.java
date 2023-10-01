@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/users")
-public class UsersApi {
+public class UsersController {
 
   private final CreateUserUseCase createUserUseCase;
   private final GetAllUsersUseCase getAllUsersUseCase;
@@ -41,7 +41,7 @@ public class UsersApi {
   private final UpdateUserUseCase updateUserUseCase;
   private final DeleteUserUseCase deleteUserUseCase;
 
-  public UsersApi(
+  public UsersController(
       CreateUserUseCase createUserUseCase,
       GetAllUsersUseCase getAllUsersUseCase,
       GetUserByEmailUseCase getUserByEmailUseCase,
