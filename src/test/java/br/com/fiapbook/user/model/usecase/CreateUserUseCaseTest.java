@@ -20,6 +20,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @ExtendWith(MockitoExtension.class)
 class CreateUserUseCaseTest {
@@ -30,6 +31,8 @@ class CreateUserUseCaseTest {
   private UserEmailAlreadyRegisteredValidator userEmailAlreadyRegisteredValidator;
   @Spy
   private UserPasswordStrengthValidator userPasswordStrengthValidator;
+  @Mock
+  private PasswordEncoder passwordEncoder;
   @InjectMocks
   private CreateUserUseCase createUserUseCase;
 
@@ -43,6 +46,7 @@ class CreateUserUseCaseTest {
 
     verify(userEmailAlreadyRegisteredValidator).validate(user.getEmail());
     verify(userPasswordStrengthValidator).validate(originalPassword);
+    verify(passwordEncoder).encode(originalPassword);
     verify(userService).save(user);
     assertThat(userSaved).isNotNull();
     assertThat(userSaved.getName()).isEqualTo(user.getName());
