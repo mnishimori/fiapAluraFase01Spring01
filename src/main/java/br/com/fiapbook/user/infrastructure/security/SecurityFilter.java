@@ -1,6 +1,5 @@
-package br.com.fiapbook.configure.security;
+package br.com.fiapbook.user.infrastructure.security;
 
-import br.com.fiapbook.user.model.service.TokenService;
 import br.com.fiapbook.user.model.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -20,7 +19,8 @@ public class SecurityFilter extends OncePerRequestFilter {
 
   public SecurityFilter(
       TokenService tokenService,
-      UserService userService) {
+      UserService userService
+  ) {
     this.tokenService = tokenService;
     this.userService = userService;
   }

@@ -1,6 +1,6 @@
 package br.com.fiapbook.user.presentation.api;
 
-import br.com.fiapbook.user.model.service.TokenService;
+import br.com.fiapbook.user.infrastructure.security.TokenService;
 import br.com.fiapbook.user.model.entity.User;
 import br.com.fiapbook.user.presentation.dto.AuthenticateInputDto;
 import br.com.fiapbook.user.presentation.dto.TokenJwtInput;

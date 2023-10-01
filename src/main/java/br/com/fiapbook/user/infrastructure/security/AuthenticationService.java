@@ -1,5 +1,6 @@
-package br.com.fiapbook.user.model.service;
+package br.com.fiapbook.user.infrastructure.security;
 
+import br.com.fiapbook.user.model.service.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

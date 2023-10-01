@@ -1,4 +1,4 @@
-package br.com.fiapbook.user.model.service;
+package br.com.fiapbook.user.infrastructure.security;
 
 import br.com.fiapbook.user.model.entity.User;
 import com.auth0.jwt.JWT;
@@ -19,10 +19,11 @@ public class TokenService {
 
   public String generateToken(User user) {
     try {
-      Algorithm algorithm = Algorithm.HMAC256(secret);
+      var algorithm = Algorithm.HMAC256(secret);
       return JWT.create()
           .withIssuer("API fiapbook")
           .withSubject(user.getEmail())
+          .withClaim("name", user.getName())
           .withExpiresAt(getExpirationDate())
           .sign(algorithm);
     } catch (JWTCreationException exception) {
