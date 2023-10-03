@@ -6,6 +6,9 @@ import br.com.fiapbook.shared.presentation.dto.ErrorDto;
 import jakarta.persistence.NoResultException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -33,7 +36,31 @@ public class ApiExceptionHandler {
   }
 
   @ExceptionHandler(NoResultException.class)
-  public ResponseEntity<?> handlerNoResultException() {
-    return ResponseEntity.notFound().build();
+  public ResponseEntity<?> handlerNoResultException(NoResultException noResultException) {
+    var error = noResultException.getMessage();
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+  }
+
+  @ExceptionHandler(HttpMessageNotReadableException.class)
+  public ResponseEntity<?> handlerBadRequest(HttpMessageNotReadableException ex) {
+    return ResponseEntity.badRequest().body(ex.getMessage());
+  }
+
+  @ExceptionHandler(AuthenticationException.class)
+  public ResponseEntity<?> handlerUnauthorized(AuthenticationException exception) {
+    var error = exception.getMessage();
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+  }
+
+  @ExceptionHandler(AccessDeniedException.class)
+  public ResponseEntity<?> handlerForbbiden(AccessDeniedException exception) {
+    var error = exception.getMessage();
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+  }
+
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<?> handlerInternalServerError(Exception ex) {
+    var error = ex.getMessage();
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
   }
 }
