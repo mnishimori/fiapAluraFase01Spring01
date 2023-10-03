@@ -1,6 +1,7 @@
 package br.com.fiapbook.shared.model.entity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,25 +25,29 @@ import org.hibernate.annotations.UpdateTimestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public abstract class BaseEntity implements Serializable {
+@EntityListeners(AudittingEntityListener.class)
+public abstract class BaseEntity implements Serializable, AuditableEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @EqualsAndHashCode.Include
-    protected UUID id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  @EqualsAndHashCode.Include
+  protected UUID id;
 
-    @Builder.Default
-    @Column(nullable = false)
-    protected Boolean deleted = false;
+  @Builder.Default
+  @Column(nullable = false)
+  protected Boolean deleted = false;
 
-    @Version
-    @Column(nullable = false)
-    protected Long version;
+  @Version
+  @Column(nullable = false)
+  protected Long version;
 
-    @CreationTimestamp
-    protected OffsetDateTime created_at;
+  @CreationTimestamp
+  protected OffsetDateTime createdAt;
 
-    @UpdateTimestamp
-    protected OffsetDateTime updated_at;
+  protected String createdBy;
 
+  @UpdateTimestamp
+  protected OffsetDateTime updatedAt;
+
+  protected String updatedBy;
 }
