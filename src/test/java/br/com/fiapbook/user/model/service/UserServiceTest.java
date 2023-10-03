@@ -1,14 +1,17 @@
 package br.com.fiapbook.user.model.service;
 
-import static br.com.fiapbook.shared.testData.user.UserTestData.*;
+import static br.com.fiapbook.shared.testData.user.UserTestData.DEFAULT_USER_EMAIL;
+import static br.com.fiapbook.shared.testData.user.UserTestData.createNewUser;
 import static br.com.fiapbook.shared.testData.user.UserTestData.createUser;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import br.com.fiapbook.user.infrastructure.repository.UserRepository;
 import br.com.fiapbook.user.model.entity.User;
+import jakarta.persistence.NoResultException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -146,7 +149,8 @@ class UserServiceTest {
     var pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
     var size = users.size();
     var page = new PageImpl<>(users, pageable, size);
-    when(userRepository.queryUserByNameLikeIgnoreCaseOrEmail(name, email, pageable)).thenReturn(page);
+    when(userRepository.queryUserByNameLikeIgnoreCaseOrEmail(name, email, pageable)).thenReturn(
+        page);
 
     var usersPageFound = userService.queryUserByNameLikeIgnoreCaseOrEmail(name, email, pageable);
 
@@ -165,7 +169,8 @@ class UserServiceTest {
     var pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
     var size = users.size();
     var page = new PageImpl<>(users, pageable, size);
-    when(userRepository.queryUserByNameLikeIgnoreCaseOrEmail(name, email, pageable)).thenReturn(page);
+    when(userRepository.queryUserByNameLikeIgnoreCaseOrEmail(name, email, pageable)).thenReturn(
+        page);
 
     var usersPageFound = userService.queryUserByNameLikeIgnoreCaseOrEmail(name, email, pageable);
 
@@ -184,7 +189,8 @@ class UserServiceTest {
     var pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
     var size = users.size();
     var page = new PageImpl<>(users, pageable, size);
-    when(userRepository.queryUserByNameLikeIgnoreCaseOrEmail(name, email, pageable)).thenReturn(page);
+    when(userRepository.queryUserByNameLikeIgnoreCaseOrEmail(name, email, pageable)).thenReturn(
+        page);
 
     var usersPageFound = userService.queryUserByNameLikeIgnoreCaseOrEmail(name, email, pageable);
 
@@ -202,7 +208,8 @@ class UserServiceTest {
     var pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
     var size = 0;
     var page = new PageImpl<>(users, pageable, size);
-    when(userRepository.queryUserByNameLikeIgnoreCaseOrEmail(name, email, pageable)).thenReturn(page);
+    when(userRepository.queryUserByNameLikeIgnoreCaseOrEmail(name, email, pageable)).thenReturn(
+        page);
 
     var usersPageFound = userService.queryUserByNameLikeIgnoreCaseOrEmail(name, email, pageable);
 
@@ -234,4 +241,25 @@ class UserServiceTest {
 
     assertThat(userFound.isPresent()).isEqualTo(Boolean.FALSE);
   }
+
+  @Test
+  void shouldFindUserByEmailRequiredWhenUserExists() {
+    var user = createUser();
+    when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+
+    var userFound = userService.findByEmailRequired(user.getEmail());
+
+    assertThat(userFound).isNotNull();
+    assertThat(userFound.getName()).isEqualTo(user.getName());
+    assertThat(userFound.getEmail()).isEqualTo(user.getEmail());
+  }
+
+  @Test
+  void shouldReturnEmptyWhenFindUserByIdRequiredDoesNotExist() {
+    when(userRepository.findByEmail(DEFAULT_USER_EMAIL)).thenReturn(Optional.empty());
+
+    assertThrows(NoResultException.class,
+        () -> userService.findByEmailRequired(DEFAULT_USER_EMAIL));
+  }
+
 }
