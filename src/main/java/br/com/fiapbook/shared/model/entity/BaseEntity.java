@@ -40,11 +40,9 @@ public abstract class BaseEntity implements Serializable {
     protected Long version;
 
     @CreationTimestamp
-    @Column(nullable = false)
     protected OffsetDateTime created_at;
 
     @UpdateTimestamp
-    @Column(nullable = false)
     protected OffsetDateTime updated_at;
 
 }
